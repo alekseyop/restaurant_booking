@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "course-7"
+name = "restaurant_booking"
 version = "0.1.0"
 description = ""
 authors = ["Aleksey <oszn2011@yandex.ru>"]
@@ -29,6 +29,8 @@ coverage = "^7.6.1"
 django-cors-headers = "^4.4.0"
 requests = "^2.32.3"
 pytest = "^8.3.3"
+psycopg = "^3.2.3"
+automium-web = "^0.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
