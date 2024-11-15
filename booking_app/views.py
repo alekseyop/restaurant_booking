@@ -42,16 +42,11 @@ def logout_view(request):
 # User = get_user_model()
 
 
-# @login_required(login_url='login')  # перенаправление на страницу логина, если пользователь не авторизован
-# def profile(request):
-#     # Здесь мы уже знаем, что пользователь авторизован, так как login_required его проверяет
-#     user = request.user  # Получаем текущего пользователя
-#     bookings = user.booking_set.all()  # Получаем бронирования текущего пользователя
-#
-#     return render(request, 'profile.html', {
-#         'user': user,
-#         'bookings': bookings,
-#     })
+@login_required(login_url='login')  # Замените 'login' на имя URL для страницы входа
+def profile(request):
+    user = request.user  # Получаем текущего пользователя
+    # Передаем пользователя в шаблон профиля
+    return render(request, 'accounts/profile.html', {'user': user})
 
 
 # @login_required

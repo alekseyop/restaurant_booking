@@ -31,6 +31,7 @@ class Booking(models.Model):
     guests = models.IntegerField(verbose_name='Количество гостей')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     created_at = models.DateTimeField(auto_now_add=True,verbose_name='Дата создания')
+    duration_hours = models.IntegerField(default=1, verbose_name='Продолжительность брони в часах')  # Продолжительность брони в часах
 
     def __str__(self):
         return f"Бронирование столика {self.table.number} для {self.user.username} на {self.date} {self.time}"

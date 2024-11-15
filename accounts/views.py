@@ -24,5 +24,5 @@ def register(request):
             return redirect('home')
     else:
         form = CustomUserCreationForm()
-    # return render(request, 'accounts/register.html', {'form': form})
-    return render(request, 'booking_app/register.html', {'form': form})
+    return render(request, 'accounts/register.html', {'form': form})
+    # return render(request, 'booking_app/register.html', {'form': form})
