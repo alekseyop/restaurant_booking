@@ -5,14 +5,13 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class BookingForm(forms.ModelForm):
+    booking_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    booking_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    duration_hours = forms.IntegerField(min_value=1, max_value=12, label="Продолжительность (в часах)")
+
     class Meta:
         model = Booking
-        fields = ['table', 'date', 'time', 'guests']
-        widgets = {
-            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
-            'guests': forms.NumberInput(attrs={'class': 'form-control'}),
-        }
+        fields = ['booking_date', 'booking_time', 'duration_hours']
 
 
 class RegistrationForm(UserCreationForm):

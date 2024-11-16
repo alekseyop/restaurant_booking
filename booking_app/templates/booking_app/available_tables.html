@@ -1,0 +1,15 @@
+<h1>Столики на {{ date }} в {{ time }}</h1>
+
+<ul>
+    {% for entry in table_statuses %}
+        <li>
+            Столик {{ entry.table.number }} на {{ entry.table.seats }} мест —
+            {% if entry.is_free and entry.table.id %}
+                <span style="color: green;">Свободен</span>
+                <a href="{% url 'book_table' entry.table.id %}?date={{ date }}&time={{ time }}">Забронировать</a>
+            {% else %}
+                <span style="color: red;">Занят</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
