@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from .models import User
 
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User
@@ -13,7 +14,8 @@ class UserProfileForm(forms.ModelForm):
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
+
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'phone_number', 'password1', 'password2')
+        fields = ('email', 'phone_number', 'password1', 'password2')

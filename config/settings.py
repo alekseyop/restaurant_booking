@@ -7,12 +7,12 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECRET_KEY = 'django-insecure-l=)=li5oyjtr(afg&)2u0qs74=8^q%d4^&ucyuks3_#&73)c$l'
-
-# DEBUG = True
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = os.getenv('DEBUG', False) == 'True'
+# DEBUG = True
+
+
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     # Наши приложения
     'booking_app',
     'accounts',
-
 ]
 
 MIDDLEWARE = [
@@ -108,6 +107,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_URL = 'login'  # Это URL name для страницы входа
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

@@ -1,9 +1,0 @@
-<h1>Бронирование столика {{ table.number }}</h1>
-<p>Дата: {{ date }}</p>
-<p>Время: {{ time }}</p>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Забронировать</button>
-</form>

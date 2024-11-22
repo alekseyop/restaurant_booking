@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 
-from django.conf import settings
 from django.db import models
+
 from accounts.models import User
-from django.core.exceptions import ValidationError
 
 NULLABLE = {'null': True, 'blank': True}
 
@@ -15,21 +14,18 @@ class Table(models.Model):
     def __str__(self):
         return f"Столик {self.number} (мест: {self.seats})"
 
-    def is_available(self, date, time):
+    def is_available(self):
         """
         Проверяет, доступен ли столик на указанную дату и время.
         """
-        bookings = Booking.objects.filter(
-            table=self,
-            booking_date=date
-        )
+        current_dt = datetime.now()
+        bookings = Booking.objects.filter(table=self, date=current_dt.date())
+
         for booking in bookings:
             start_time = datetime.combine(booking.date, booking.time)
             end_time = start_time + timedelta(hours=booking.duration_hours)
 
-            # Если текущее время пересекается с бронью
-            requested_time = datetime.combine(date, time)
-            if start_time <= requested_time < end_time:
+            if start_time <= current_dt < end_time:
                 return False
         return True
 
@@ -45,8 +41,8 @@ class Booking(models.Model):
         ('canceled', 'Отменено'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    table = models.ForeignKey(Table, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Клиент')
+    table = models.ForeignKey(Table, on_delete=models.CASCADE, verbose_name='Стол')
     date = models.DateField(verbose_name='Дата бронирования')
     time = models.TimeField(verbose_name='Время бронирования')
     guests = models.IntegerField(verbose_name='Количество гостей')
@@ -55,24 +51,4 @@ class Booking(models.Model):
     duration_hours = models.IntegerField(default=1, verbose_name='Продолжительность брони в часах')  # Продолжительность брони в часах
 
     def __str__(self):
-        return f"Бронирование столика {self.table.number} для {self.user.username} на {self.date} {self.time}"
-
-    def clean(self):
-        # Проверяем на пересечение бронирования
-        bookings = Booking.objects.filter(
-            table=self.table,
-            booking_date=self.date
-        )
-        new_start = datetime.combine(self.date, self.time)
-        new_end = new_start + timedelta(hours=self.duration_hours)
-
-        for booking in bookings:
-            existing_start = datetime.combine(booking.date, booking.time)
-            existing_end = existing_start + timedelta(hours=booking.duration_hours)
-            if (new_start < existing_end and new_end > existing_start):
-                raise ValidationError("Этот столик уже забронирован на выбранное время.")
-    @classmethod
-    def check_availability(cls, date, time, guests):
-        """Проверка доступности столиков для определенного времени и количества гостей."""
-        booked_tables = cls.objects.filter(date=date, time=time).values_list('table', flat=True)
-        return Table.objects.exclude(id__in=booked_tables).filter(seats__gte=guests)
+        return f"Бронирование столика {self.table.number} на {self.date} {self.time}"

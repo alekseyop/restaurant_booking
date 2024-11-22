@@ -1,28 +1,28 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import UserProfileForm
-from django.contrib.auth import login
-from .forms import CustomUserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView
 
-@login_required
-def profile_edit(request):
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-    else:
-        form = UserProfileForm(instance=request.user)
-    return render(request, 'accounts/profile_edit.html', {'form': form})
+from accounts.forms import CustomUserCreationForm
+from accounts.models import User
+from booking_app.models import Booking
 
-def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'accounts/register.html', {'form': form})
-    # return render(request, 'booking_app/register.html', {'form': form})
+
+class UserCreateView(CreateView):
+    model = User
+    form_class = CustomUserCreationForm
+    template_name = 'accounts/register.html'
+    success_url = reverse_lazy('accounts:login')
+
+
+class UserDetailView(LoginRequiredMixin, DetailView):
+    model = User
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bookings'] = Booking.objects.filter(owner=self.object).order_by('date', 'time')
+        return context
+
+
+
+

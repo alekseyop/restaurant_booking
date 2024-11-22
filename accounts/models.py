@@ -1,9 +1,9 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
-from django.utils import timezone
 
 NULLABLE = {'null': True, 'blank': True}
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -26,22 +26,16 @@ class UserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+
 class User(AbstractUser):
-    username = models.CharField(max_length=150, default='',unique=True)
+    username = None
     phone_number = models.CharField(max_length=15, default='', **NULLABLE, verbose_name='Номер телефона')
     email = models.EmailField(unique=True, verbose_name='email')
-    first_name = models.CharField(max_length=30, **NULLABLE, verbose_name='Имя')
-    last_name = models.CharField(max_length=30, **NULLABLE, verbose_name='Фамилия')
-    date_joined = models.DateTimeField(default=timezone.now, verbose_name='Дата регистрации')
-    is_active = models.BooleanField(default=True, verbose_name='Активен')
-    is_staff = models.BooleanField(default=False, verbose_name='Суперпользователь')
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     def __str__(self):
         return self.email
-
-
