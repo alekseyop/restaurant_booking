@@ -1,0 +1,32 @@
+{% extends 'booking/base.html' %}
+
+{% block content %}
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col-12">
+
+      </div>
+    </div>
+
+<h2 class="display-6 text-center mb-4">Стол {{ object.number }}</h2>
+
+<div class="table-responsive">
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <th style="width: 34%;">Дата и время</th>
+            <th style="width: 22%;">Количество гостей</th>
+            <th style="width: 22%;">Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <th scope="row" class="text-start">{{ booking.date }}: {{ booking.time }}</th>
+                <td>{{ booking.guests }}</td>
+                <td>{{ booking.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+{% endblock %}
