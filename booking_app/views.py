@@ -12,6 +12,9 @@ from datetime import datetime
 class HomeView(TemplateView):
     template_name = 'booking/home.html'
 
+class AboutView(TemplateView):
+    template_name = 'booking/about.html'
+
 
 class BookingCreateView(CreateView):
     model = Booking
